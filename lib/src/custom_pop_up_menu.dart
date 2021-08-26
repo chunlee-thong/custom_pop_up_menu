@@ -96,8 +96,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
             Center(
               child: Container(
                 constraints: BoxConstraints(
-                  maxWidth:
-                      _parentBox!.size.width - 2 * widget.horizontalMargin,
+                  maxWidth: _parentBox!.size.width - 2 * widget.horizontalMargin,
                   minWidth: 0,
                 ),
                 child: CustomMultiChildLayout(
@@ -174,8 +173,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
     WidgetsBinding.instance?.addPostFrameCallback((call) {
       if (mounted) {
         _childBox = context.findRenderObject() as RenderBox?;
-        _parentBox =
-            Overlay.of(context)?.context.findRenderObject() as RenderBox?;
+        _parentBox = Overlay.of(context)?.context.findRenderObject() as RenderBox?;
       }
     });
   }
@@ -191,11 +189,12 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
   Widget build(BuildContext context) {
     var child = Material(
       child: InkWell(
-        hoverColor: Colors.transparent,
-        focusColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
+        // hoverColor: Colors.transparent,
+        // focusColor: Colors.transparent,
+        // splashColor: Colors.transparent,
+        // highlightColor: Colors.transparent,
         child: widget.child,
+        customBorder: const CircleBorder(),
         onTap: () {
           if (widget.pressType == PressType.singleClick) {
             _controller?.showMenu();
@@ -294,8 +293,7 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
     } else if (anchorCenterX + contentSize.width / 2 > size.width) {
       menuPosition = isTop ? _MenuPosition.topRight : _MenuPosition.bottomRight;
     } else {
-      menuPosition =
-          isTop ? _MenuPosition.topCenter : _MenuPosition.bottomCenter;
+      menuPosition = isTop ? _MenuPosition.topCenter : _MenuPosition.bottomCenter;
     }
 
     switch (menuPosition) {
@@ -310,16 +308,14 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
         );
         break;
       case _MenuPosition.bottomLeft:
-        arrowOffset = Offset(anchorCenterX - arrowSize.width / 2,
-            anchorBottomY + verticalMargin);
+        arrowOffset = Offset(anchorCenterX - arrowSize.width / 2, anchorBottomY + verticalMargin);
         contentOffset = Offset(
           0,
           anchorBottomY + verticalMargin + arrowSize.height,
         );
         break;
       case _MenuPosition.bottomRight:
-        arrowOffset = Offset(anchorCenterX - arrowSize.width / 2,
-            anchorBottomY + verticalMargin);
+        arrowOffset = Offset(anchorCenterX - arrowSize.width / 2, anchorBottomY + verticalMargin);
         contentOffset = Offset(
           size.width - contentSize.width,
           anchorBottomY + verticalMargin + arrowSize.height,
@@ -367,17 +363,13 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
     if (hasChild(_MenuLayoutId.arrow)) {
       positionChild(
         _MenuLayoutId.arrow,
-        isBottom
-            ? Offset(arrowOffset.dx, arrowOffset.dy + 0.1)
-            : Offset(-100, 0),
+        isBottom ? Offset(arrowOffset.dx, arrowOffset.dy + 0.1) : Offset(-100, 0),
       );
     }
     if (hasChild(_MenuLayoutId.downArrow)) {
       positionChild(
         _MenuLayoutId.downArrow,
-        !isBottom
-            ? Offset(arrowOffset.dx, arrowOffset.dy - 0.1)
-            : Offset(-100, 0),
+        !isBottom ? Offset(arrowOffset.dx, arrowOffset.dy - 0.1) : Offset(-100, 0),
       );
     }
   }
