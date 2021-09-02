@@ -37,11 +37,9 @@ class CustomPopupMenu extends StatefulWidget {
     required this.child,
     required this.menuBuilder,
     required this.pressType,
+    required this.arrow,
     this.controller,
-    this.arrowColor = const Color(0xFF4C4C4C),
-    this.showArrow = true,
     this.barrierColor = Colors.black12,
-    this.arrowSize = 10.0,
     this.horizontalMargin = 10.0,
     this.verticalMargin = 10.0,
     this.position,
@@ -50,12 +48,10 @@ class CustomPopupMenu extends StatefulWidget {
 
   final Widget child;
   final PressType pressType;
-  final bool showArrow;
-  final Color arrowColor;
   final Color barrierColor;
   final double horizontalMargin;
   final double verticalMargin;
-  final double arrowSize;
+  final Widget arrow;
   final CustomPopupMenuController? controller;
   final Widget Function() menuBuilder;
   final PreferredPosition? position;
@@ -72,14 +68,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
   CustomPopupMenuController? _controller;
 
   _showMenu() {
-    Widget arrow = ClipPath(
-      child: Container(
-        width: widget.arrowSize,
-        height: widget.arrowSize,
-        color: widget.arrowColor,
-      ),
-      clipper: _ArrowClipper(),
-    );
+    Widget arrow = widget.arrow;
 
     _overlayEntry = OverlayEntry(
       builder: (context) {
@@ -109,19 +98,17 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                     position: widget.position,
                   ),
                   children: <Widget>[
-                    if (widget.showArrow)
-                      LayoutId(
-                        id: _MenuLayoutId.arrow,
+                    LayoutId(
+                      id: _MenuLayoutId.arrow,
+                      child: arrow,
+                    ),
+                    LayoutId(
+                      id: _MenuLayoutId.downArrow,
+                      child: Transform.rotate(
+                        angle: math.pi,
                         child: arrow,
                       ),
-                    if (widget.showArrow)
-                      LayoutId(
-                        id: _MenuLayoutId.downArrow,
-                        child: Transform.rotate(
-                          angle: math.pi,
-                          child: arrow,
-                        ),
-                      ),
+                    ),
                     LayoutId(
                       id: _MenuLayoutId.content,
                       child: Column(
