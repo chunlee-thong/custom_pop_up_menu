@@ -44,6 +44,7 @@ class CustomPopupMenu extends StatefulWidget {
     this.verticalMargin = 10.0,
     this.position,
     this.menuOnChange,
+    this.anchorYOffset = 0.0,
   });
 
   final Widget child;
@@ -51,6 +52,7 @@ class CustomPopupMenu extends StatefulWidget {
   final Color barrierColor;
   final double horizontalMargin;
   final double verticalMargin;
+  final double anchorYOffset;
   final Widget arrow;
   final CustomPopupMenuController? controller;
   final Widget Function() menuBuilder;
@@ -92,7 +94,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                   delegate: _MenuLayoutDelegate(
                     anchorSize: _childBox!.size,
                     anchorOffset: _childBox!.localToGlobal(
-                      Offset(-widget.horizontalMargin, 0),
+                      Offset(-widget.horizontalMargin, widget.anchorYOffset),
                     ),
                     verticalMargin: widget.verticalMargin,
                     position: widget.position,
