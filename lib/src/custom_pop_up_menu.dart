@@ -358,13 +358,13 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
     if (hasChild(_MenuLayoutId.arrow)) {
       positionChild(
         _MenuLayoutId.arrow,
-        isBottom ? Offset(arrowOffset.dx, arrowOffset.dy - 8) : Offset(-100, 0),
+        isBottom ? Offset(arrowOffset.dx, arrowOffset.dy - 8.1) : Offset(-100, 0),
       );
     }
     if (hasChild(_MenuLayoutId.downArrow)) {
       positionChild(
         _MenuLayoutId.downArrow,
-        !isBottom ? Offset(arrowOffset.dx, arrowOffset.dy + 8) : Offset(-100, 0),
+        !isBottom ? Offset(arrowOffset.dx, arrowOffset.dy + 8.1) : Offset(-100, 0),
       );
     }
   }
