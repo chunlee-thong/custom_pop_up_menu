@@ -339,14 +339,22 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
         );
         break;
     }
-    if (hasChild(_MenuLayoutId.content)) {
-      positionChild(_MenuLayoutId.content, contentOffset);
-    }
     bool isBottom = false;
     if (_MenuPosition.values.indexOf(menuPosition) < 3) {
       // bottom
       isBottom = true;
     }
+
+    if (hasChild(_MenuLayoutId.content)) {
+      positionChild(
+        _MenuLayoutId.content,
+        Offset(
+          contentOffset.dx,
+          contentOffset.dy + (isBottom ? -8 : 8),
+        ),
+      );
+    }
+
     if (hasChild(_MenuLayoutId.arrow)) {
       positionChild(
         _MenuLayoutId.arrow,
