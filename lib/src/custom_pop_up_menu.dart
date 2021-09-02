@@ -44,7 +44,6 @@ class CustomPopupMenu extends StatefulWidget {
     this.verticalMargin = 10.0,
     this.position,
     this.menuOnChange,
-    this.anchorYOffset = 0.0,
   });
 
   final Widget child;
@@ -52,7 +51,6 @@ class CustomPopupMenu extends StatefulWidget {
   final Color barrierColor;
   final double horizontalMargin;
   final double verticalMargin;
-  final double anchorYOffset;
   final Widget arrow;
   final CustomPopupMenuController? controller;
   final Widget Function() menuBuilder;
@@ -94,23 +92,12 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                   delegate: _MenuLayoutDelegate(
                     anchorSize: _childBox!.size,
                     anchorOffset: _childBox!.localToGlobal(
-                      Offset(-widget.horizontalMargin, widget.anchorYOffset),
+                      Offset(-widget.horizontalMargin, 0.0),
                     ),
                     verticalMargin: widget.verticalMargin,
                     position: widget.position,
                   ),
                   children: <Widget>[
-                    LayoutId(
-                      id: _MenuLayoutId.arrow,
-                      child: arrow,
-                    ),
-                    LayoutId(
-                      id: _MenuLayoutId.downArrow,
-                      child: Transform.rotate(
-                        angle: math.pi,
-                        child: arrow,
-                      ),
-                    ),
                     LayoutId(
                       id: _MenuLayoutId.content,
                       child: Column(
@@ -121,6 +108,17 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                             color: Colors.transparent,
                           ),
                         ],
+                      ),
+                    ),
+                    LayoutId(
+                      id: _MenuLayoutId.arrow,
+                      child: arrow,
+                    ),
+                    LayoutId(
+                      id: _MenuLayoutId.downArrow,
+                      child: Transform.rotate(
+                        angle: math.pi,
+                        child: arrow,
                       ),
                     ),
                   ],
@@ -352,13 +350,13 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
     if (hasChild(_MenuLayoutId.arrow)) {
       positionChild(
         _MenuLayoutId.arrow,
-        isBottom ? Offset(arrowOffset.dx, arrowOffset.dy + 0.1) : Offset(-100, 0),
+        isBottom ? Offset(arrowOffset.dx, arrowOffset.dy - 8) : Offset(-100, 0),
       );
     }
     if (hasChild(_MenuLayoutId.downArrow)) {
       positionChild(
         _MenuLayoutId.downArrow,
-        !isBottom ? Offset(arrowOffset.dx, arrowOffset.dy - 0.1) : Offset(-100, 0),
+        !isBottom ? Offset(arrowOffset.dx, arrowOffset.dy + 8) : Offset(-100, 0),
       );
     }
   }
