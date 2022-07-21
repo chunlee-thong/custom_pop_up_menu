@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+
 import 'platform/platform.dart';
 
 enum PressType {
@@ -69,6 +70,14 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
 
   _showMenu() {
     Widget arrow = widget.arrow;
+    final delegate = _MenuLayoutDelegate(
+      anchorSize: _childBox!.size,
+      anchorOffset: _childBox!.localToGlobal(
+        Offset(-widget.horizontalMargin, 0.0),
+      ),
+      verticalMargin: widget.verticalMargin,
+      position: widget.position,
+    );
 
     _overlayEntry = OverlayEntry(
       builder: (context) {
@@ -88,40 +97,44 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
                   maxWidth: _parentBox!.size.width - 2 * widget.horizontalMargin,
                   minWidth: 0,
                 ),
-                child: CustomMultiChildLayout(
-                  delegate: _MenuLayoutDelegate(
-                    anchorSize: _childBox!.size,
-                    anchorOffset: _childBox!.localToGlobal(
-                      Offset(-widget.horizontalMargin, 0.0),
-                    ),
-                    verticalMargin: widget.verticalMargin,
-                    position: widget.position,
-                  ),
-                  children: <Widget>[
-                    LayoutId(
-                      id: _MenuLayoutId.content,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Material(
-                            child: widget.menuBuilder(),
-                            color: Colors.transparent,
-                          ),
-                        ],
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  duration: const Duration(milliseconds: 200),
+                  builder: (context, value, child) {
+                    return Transform.scale(
+                      scale: value,
+                      child: child!,
+                      //alignment: delegate.arrowAlignment,
+                    );
+                  },
+                  child: CustomMultiChildLayout(
+                    delegate: delegate,
+                    children: <Widget>[
+                      LayoutId(
+                        id: _MenuLayoutId.content,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Material(
+                              child: widget.menuBuilder(),
+                              color: Colors.transparent,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    LayoutId(
-                      id: _MenuLayoutId.arrow,
-                      child: arrow,
-                    ),
-                    LayoutId(
-                      id: _MenuLayoutId.downArrow,
-                      child: Transform.rotate(
-                        angle: math.pi,
+                      LayoutId(
+                        id: _MenuLayoutId.arrow,
                         child: arrow,
                       ),
-                    ),
-                  ],
+                      LayoutId(
+                        id: _MenuLayoutId.downArrow,
+                        child: Transform.rotate(
+                          angle: math.pi,
+                          child: arrow,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -157,7 +170,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
     _controller = widget.controller;
     if (_controller == null) _controller = CustomPopupMenuController();
     _controller?.addListener(_updateView);
-    WidgetsBinding.instance?.addPostFrameCallback((call) {
+    WidgetsBinding.instance.addPostFrameCallback((call) {
       if (mounted) {
         _childBox = context.findRenderObject() as RenderBox?;
         _parentBox = Overlay.of(context)?.context.findRenderObject() as RenderBox?;
@@ -236,6 +249,8 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
   final Offset anchorOffset;
   final double verticalMargin;
   final PreferredPosition? position;
+
+  Alignment arrowAlignment = Alignment.topRight;
 
   @override
   void performLayout(Size size) {
@@ -343,6 +358,7 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
     if (_MenuPosition.values.indexOf(menuPosition) < 3) {
       // bottom
       isBottom = true;
+      arrowAlignment = Alignment.bottomRight;
     }
 
     if (hasChild(_MenuLayoutId.content)) {

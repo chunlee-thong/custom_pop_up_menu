@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   custom_pop_up_menu:
-    path: '../'
+    path: "../"
 
 dev_dependencies:
   flutter_test:
@@ -18,4 +18,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
